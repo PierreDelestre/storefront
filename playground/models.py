@@ -1,13 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Product(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    inventory = models.IntegerField()
-    last_update = models.DateTimeField(auto_now=True)
-    collection = models.ForeignKey('Collection', on_delete=models.PROTECT) # we do not delete all products if we delete a collection
+
 
 class Collection(models.Model):
     title = models.CharField(max_length=255)
@@ -63,6 +57,19 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
 
+# Promotion (n) - Product (n)
+class Promotion(models.Model):
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
+
+class Product(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    inventory = models.IntegerField()
+    last_update = models.DateTimeField(auto_now=True)
+    collection = models.ForeignKey('Collection', on_delete=models.PROTECT) # we do not delete all products if we delete a collection
+    promotions = models.ManyToManyField(Promotion)
 
 
 
